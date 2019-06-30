@@ -1,0 +1,7 @@
+Group,Predicted,Predicted SE,Experiment,Experiment SE,Diff-in-Diff,Diff-in-Diff SE
+All Girls,10.1,,8,4.6,10.3,6.7
+Girls Behind,10.7,,12.8,5.7,14.1,8.3
+Girls Behind; HGC $\geq$ 6,25.9,,7.1,8.6,17.7,12
+All Boys,9.9,,3.8,4.2,3.1,6.1
+Boys Behind,11.6,,4.2,5.2,4,7.4
+Boys Behind  HGC $\geq$ 6,19,,1.2,8.4,3.8,11.7
