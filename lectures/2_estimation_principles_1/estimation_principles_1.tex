@@ -59,6 +59,15 @@
   }%
 }
 
+\usepackage{minted}
+
+\newminted{python}{fontsize=\tiny,
+                   %linenos,
+                   numbersep=8pt,
+                   gobble=4,
+                   %frame=lines,
+                   framesep=3mm}
+
 % Colors =======================================================================
 % short color names
 % blues
@@ -347,6 +356,38 @@
 \end{frame}
 
 
+% \defverbatim[colored]\exampleCode{
+% \begin{pythoncode}
+%
+%     import numpy as np
+%     import pylab as pl
+%
+% \end{pythoncode}
+% }
+%
+%
+% \begin{frame}[c]\frametitle{title}
+%     \exampleCode
+% \end{frame}
+
+
+\defverbatim[colored]\exampleCode{
+\begin{pythoncode}
+
+    import numpy as np
+    import scipy
+
+    def likelihood(mu, sigma, sample):
+        likelihoods = scipy.stats.norm.pdf(sample, loc=mu, scale=sigma)
+        return np.prod(likelihoods)
+
+\end{pythoncode}
+}
+
+\begin{frame}[c]\frametitle{Python Implementation}
+    \exampleCode
+\end{frame}
+
 \begin{frame}[c]\frametitle{Notebook}
     Look at likelihood\_example\_1.ipynb
 \end{frame}
@@ -424,9 +465,35 @@
 
 
 
+\defverbatim[colored]\exampleCode{
+\begin{pythoncode}
+
+    import numpy as np
+    import scipy
+
+    def msm_criterion(mu, sigma, sample):
+        simulated_sample = np.random.normal(loc=mu, scale=sigma, size=len(sample))
+        m_emp = np.array([[sample.mean()], [sample.std()]])
+        m_sim = np.array([[simulated_sample.mean()], [simulated_sample.std()]])
+        diff = m_emp - m_sim
+        w = np.eye(2)
+        return diff.T.dot(w).dot(diff)[0][0]
+
+\end{pythoncode}
+}
+
+\begin{frame}[c]\frametitle{Python Implementation}
+    \exampleCode
+\end{frame}
+
+
+
 \begin{frame}[c]\frametitle{Notebook}
     Look at msm\_example\_1.ipynb
 \end{frame}
+
+
+
 
 
 \begin{frame}[c]\frametitle{Some Insights from the Example}
@@ -437,12 +504,18 @@
             \item Simulation noise
         \end{itemize}
         \item Likelihood needs the same assumption and will always be more efficient!
-        \item Sampling scheme is important
-        \begin{itemize}
-            \item We can make the criterion smooth
-            \item But can't get rid of sampling noise!
-        \end{itemize}
     \end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]\frametitle{Why Would We Ever Use MSM?}
+\begin{itemize}
+    \item Likelihood often involves high dimensional integrals
+    \item Likelihood is harder to derive
+    \item Some say, MSM is more transparent
+    \item Data might be on a slow server
+    \item Different datasets
+\end{itemize}
 \end{frame}
 
 
@@ -541,6 +614,41 @@
 
 \begin{frame}[c]\frametitle{Notebook}
     look at 1d\_minimization.ipynb
+\end{frame}
+
+
+\begin{frame}[c]\frametitle{Insights from the Example}
+
+    \begin{itemize}
+        \item Sampling scheme can be very important
+        \item Robust optimizers can solve some problems, but maybe you don't need them!
+        \item Always understand the problem you want to solve!
+    \end{itemize}
+
+\end{frame}
+
+
+
+\defverbatim[colored]\exampleCode{
+\begin{pythoncode}
+
+    import numpy as np
+    import scipy
+
+    def smooth_msm_criterion(mu, sigma, sample):
+        np.random.seed(5471)
+        simulated_sample = np.random.normal(size=len(sample)) * sigma + mu
+        m_emp = np.array([[sample.mean()], [sample.std()]])
+        m_sim = np.array([[simulated_sample.mean()], [simulated_sample.std()]])
+        diff = m_emp - m_sim
+        w = np.eye(2)
+        return diff.T.dot(w).dot(diff)[0][0]
+
+\end{pythoncode}
+}
+
+\begin{frame}[c]\frametitle{Smooth Python Implementation}
+    \exampleCode
 \end{frame}
 
 
@@ -644,8 +752,6 @@ look at monte\_carlo.ipynb
             \item e.g. estimate covariance matrices, probabilities, \ldots
         \end{itemize}
         \item Interactive dashboard with live convergence plots
-        \item If you ever do structural econometrics: use estimagic!
-        \item But maybe wait a few months \ldots
     \end{itemize}
 \end{frame}
 
@@ -655,6 +761,18 @@ look at monte\_carlo.ipynb
     \begin{figure}
         \includegraphics[height=\textheight]{figures/convergence_plot.png}
     \end{figure}
+\end{frame}
+
+
+\begin{frame}[c]\frametitle{Some Tipps}
+    \begin{itemize}
+        \item Start by implementing toy examples
+        \item When you hit problem, reproduce and solve them in minimal examples
+        \item Use as much existing code as possible
+        \item If you think you need a fancy optimizer, you probably don't
+        \item If you ever do structural econometrics: use estimagic!
+        \item But maybe wait a few months \ldots
+    \end{itemize}
 \end{frame}
 
 
